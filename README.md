@@ -38,7 +38,7 @@ Para instalar y ejecutar FuelTracker, sigue estos pasos:
 
 ## Sobre el Autor
 
-Mi nombre es Juan David Moreno Arias y soy el desarrollador principal de FuelTracker. Soy estudiante de Ingeniería de Sistemas e Informatica en la Universidad Nacional de Colombia. Me apasiona la programación y la resolución de problemas, y este proyecto es parte de mi trabajo para mejorar la eficiencia y el ahorro de combustible en el transporte automotriz.
+Mi nombre es Juan David Moreno Arias y soy el desarrollador principal de FuelTracker. Soy estudiante de Ingeniería de Sistemas e Informatica en la Universidad Nacional de Colombia. Me apasiona la programación y la resolución de problemas, y este proyecto es parte de mi trabajo para mejorar la eficiencia y el ahorro de combustible en el transporte automotriz. Adicionalmente, tengo un trabajo de tiempo medio donde a menudo realizo tareas involucradas a la programación, y siempre estoy tratando de aprender.
 
 ## Finalmente
 
