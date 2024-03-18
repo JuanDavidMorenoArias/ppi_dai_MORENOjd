@@ -44,3 +44,5 @@ Mi nombre es Juan David Moreno Arias y soy el desarrollador principal de FuelTra
 ## Finalmente
 
 Personalmente aprecio mucho los comentarios positivos o cosas que puedo mejorar para siguientes proyectos. Si eres un desarrollador y tienes ideas para correcciones o mejoras, ¡no dudes en contribuir al proyecto! Tu ayuda es muy apreciada y contribuirá a hacer de FuelTracker una herramienta aún más útil y efectiva para los conductores de todo el mundo.
+
+-**LinkedIn**: https://www.linkedin.com/in/Ju4nDa4vidMor3no
