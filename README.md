@@ -15,6 +15,7 @@ FuelTracker utiliza varias librerías para realizar distintas tareas:
 - **Matplotlib**: Se utiliza para visualizar gráficos que muestran tendencias de consumo de combustible a lo largo del tiempo y comparaciones entre diferentes vehículos.
 - **Scipy**: Se utiliza para realizar análisis estadísticos avanzados sobre los datos de consumo de combustible, como regresiones para predecir el consumo futuro.
 - **Geopandas**: Se utiliza para visualizar la ubicación de las estaciones de servicio en un mapa y calcular rutas óptimas en función del consumo de combustible.
+- **Tkinter**: Se utiliza para la creacion de inferfazes de Usuario
 
 ## Instalación
 
