@@ -2,7 +2,7 @@
 
 ## Descripción
 
-FuelTrack es una aplicación diseñada para ayudar a los conductores a rastrear su consumo de combustible, calcular el costo de viajes y analizar patrones de consumo a lo largo del tiempo. Con el aumento de los precios del combustible, los conductores buscan formas de optimizar su consumo y reducir costos, y FuelTracker ofrece una solución conveniente y útil para monitorear y mejorar la eficiencia del combustible.
+FuelTrack es una aplicación diseñada para ayudar a los conductores a rastrear su consumo de combustible, calcular el costo de viajes y analizar patrones de consumo a lo largo del tiempo. Con el aumento de los precios del combustible, los conductores buscan formas de optimizar su consumo y reducir costos, y FuelTrack ofrece una solución conveniente y útil para monitorear y mejorar la eficiencia del combustible.
 
 ## Uso de las librerías
 
