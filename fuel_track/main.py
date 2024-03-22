@@ -25,9 +25,22 @@ class App():
         self.root.title('Fueltrack') # titulo de la ventana   
         self.root.config(background='white')
         self.root.iconbitmap("Images/FueltrackIcon.ico") # Imagen en la barra de titulo    
+        self.existing_users = self.load_existing_users()
         self.main_show() # Muestra todox
         self.root.mainloop()
         return
+    
+    # Obtiene los usuarios que ya estan creados
+    def load_existing_users(self):
+        try: # Leer los nombres de usuario existentes desde el archivo users.txt
+            with open('users.txt','r') as file:
+                existing_users = {}
+                for line in file.readlines():
+                    username, password = line.strip().split(',')
+                    existing_users[username] = password
+            return existing_users
+        except FileNotFoundError: # Si no existe el archivo, mas adelante lo creara
+            return {}
 
     def main_show(self):
 
@@ -51,23 +64,25 @@ class App():
         by_me.place(relx=0.27, rely=0.84, anchor='center') # With love by Juan David Moreno
 
         # FRAME DE INICIO DE SESION 
-        self.login_frame = LogInFrame(self.root,self.switch_to_register)
+        self.login_frame = LogInFrame(self.root,self.switch_to_register,self.existing_users)
         self.login_frame.place(relx=0.75,rely=0.5, anchor='center')
         self.login_frame.connect_focus_events()
 
-    def switch_to_register(self): # El boton de sign up me mande al registro      
+    def switch_to_register(self): # El boton de sign up me mande al registro 
+
         # Destruir la ventana de inicio de sesión
         self.login_frame.destroy()
         # Crear y mostrar la ventana de registro
-        self.register_frame = RegisterFrame(self.root, self.switch_to_login)
+        self.register_frame = RegisterFrame(self.root, self.switch_to_login,self.existing_users)
         self.register_frame.place(relx=0.75,rely=0.5, anchor='center')
         self.register_frame.connect_focus_events()
 
-    def switch_to_login(self):
+    def switch_to_login(self): # El boton de sign in me mande al inicio de sesion
+
         # Destruir la ventana de registro
         self.register_frame.destroy()
         # Crear y mostrar la ventana de inicio de sesión
-        self.login_frame = LogInFrame(self.root, self.switch_to_register)
+        self.login_frame = LogInFrame(self.root, self.switch_to_register,self.existing_users)
         self.login_frame.place(relx=0.75, rely=0.5, anchor='center')
         self.login_frame.connect_focus_events()
         

@@ -1,16 +1,20 @@
 
 # Importo librerias
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
+
+import focuses
 
 class LogInFrame(tk.Frame):
     # En esta clase 
-    def __init__(self,parent,switch_to_register):
+    def __init__(self,parent,switch_to_register, existing_users):
         super().__init__(parent, width=350, height=350, background='white')
         # parent: la ventana padre 
         self.parent = parent
         # switch es el metodo para ir al registro
         self.switch_to_register = switch_to_register
+        # almacena los usuarios
+        self.existing_users = existing_users
         # activa la creacion de widgets
         self.create_widgets()
     
@@ -41,43 +45,23 @@ class LogInFrame(tk.Frame):
         self.sign_up_button.place(relx=0.65, rely=0.87)
         self.sign_up_button.config(command=self.switch_to_register)
 
-    # Los siguientes son metodos que agregan calidad, focus in and out para los entries que creé
-    # cuando enfoco al entry, desaparece el "username" en gris y escribo en negro
-    def user_on_enter(self, e):
-        name = self.user.get()
-        if name == 'Username':
-            self.user.delete(0, 'end')
-            self.user.config(foreground='black')
-
-    # cuando desenfoco el entry, aparece el "username" en gris (si no hay nada escrito)
-    def user_on_leave(self, e):
-        name = self.user.get()
-        if name == '':
-            self.user.config(foreground='gray')
-            self.user.insert(0, 'Username')
-
-    # cuando enfoco al entry, desaparece el "Password" en gris, escribo en negro y en asteriscos para ocultar
-    def code_on_enter(self, e):
-        namei = self.code.get()
-        if namei == 'Password':
-            self.code.delete(0, 'end')
-            self.code.config(foreground='black',show='*')
-            
-    # cuando desenfoco el entry, aparece el "Password" en gris (si no hay nada escrito)
-    def code_on_leave(self, e):
-        namei = self.code.get()
-        if namei == '':
-            self.code.config(foreground='gray',show='')
-            self.code.insert(0, 'Password')
-            
-    # conecto mediante el metodo bind() las funciones que cree con los eventos FocusIn and Out
     def connect_focus_events(self):
-        self.user.bind('<FocusIn>', self.user_on_enter)
-        self.user.bind('<FocusOut>', self.user_on_leave)
-        self.code.bind('<FocusIn>', self.code_on_enter)
-        self.code.bind('<FocusOut>', self.code_on_leave)
-
+        self.user.bind('<FocusIn>', lambda event: focuses.user_on_enter(self.user))
+        self.user.bind('<FocusOut>', lambda event: focuses.user_on_leave(self.user))
+        self.code.bind('<FocusIn>', lambda event: focuses.code_on_enter(self.code))
+        self.code.bind('<FocusOut>', lambda event: focuses.code_on_leave(self.code))
+    
+    
     # El metodo que va ligado al Boton de sign in, que abrira todo lo demas si se inicia sesion :)
     def sign_in(self):
-        username = self.user.get()
-        password = self.code.get()
+        username = self.user.get().strip()
+        password = self.code.get().strip()
+
+        if username not in self.existing_users:
+            messagebox.showerror('Error','User not found!')
+        else:
+            if self.existing_users[username] != password:
+                messagebox.showerror('Error', 'Incorrect password!')
+            else:
+                messagebox.showinfo('Welcome back','Logged in successfully!')
+            

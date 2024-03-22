@@ -3,28 +3,21 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import re
 
+import focuses
+
 class RegisterFrame(tk.Frame):
     # En esta clase
-    def __init__(self,parent,switch_to_login):
+    def __init__(self,parent,switch_to_login,existing_users):
         super().__init__(parent, width=350, height=450, background='white')
         # Parent: la ventana padre
         self.parent = parent
         #switch es el metodo para ir al inicio de sesion
         self.switch_to_login = switch_to_login
         # almacena los usuarios
-        self.existing_users = self.load_existing_users() 
+        self.existing_users = existing_users
         # activa la creacion de widgets
         self.create_widgets()
-
-    # Obtiene los usuarios que ya estan creados
-    def load_existing_users(self):
-        try: # Leer los nombres de usuario existentes desde el archivo users.txt
-            with open('users.txt','r') as file:
-                existing_users = [line.split(',')[0] for line in file.readlines()]
-            return existing_users
-        except FileNotFoundError: # Si no existe el archivo, mas adelante lo creara
-            return []
-                
+              
     # Creacion de los widgets del frame, botones, entries y labels de texto
     def create_widgets(self):
         # Texto "Sign Up"
@@ -57,65 +50,15 @@ class RegisterFrame(tk.Frame):
         self.sign_in_button.place(relx=0.59, rely=0.91)
         self.sign_in_button.config(command=self.switch_to_login)
     
-    # Los siguientes son metodos que agregan calidad, focus in and out para los entries que creé
-    # cuando enfoco al entry, desaparece el "username" en gris y escribo en negro
-    # tambien se encarga de eliminar espacios en blanco para eliminar sensibilidad
-    def user_on_enter(self, e):
-        name = self.user.get()
-        self.user.delete(0, 'end')
-        if name == 'Username':
-            self.user.config(foreground='black')
-        else:
-            self.user.insert(0,name.strip())
-
-    # cuando desenfoco el entry, aparece el "username" en gris (si no hay nada escrito)
-    def user_on_leave(self, e):
-        name = self.user.get()
-        if name == '':
-            self.user.config(foreground='gray')
-            self.user.insert(0, 'Username')
-
-    # cuando enfoco al entry, desaparece el "Password" en gris, escribo en negro 
-    # tambien se encarga de eliminar espacios en blanco para eliminar sensibilidad
-    def code_on_enter(self, e):
-        name = self.code.get()
-        self.code.delete(0, 'end')
-        if name == 'Password':
-            self.code.config(foreground='black')
-        else:
-            self.code.insert(0,name.strip())
-
-    # cuando desenfoco el entry, aparece el "Password" en gris (si no hay nada escrito)
-    def code_on_leave(self, e):
-        name = self.code.get()
-        if name == '':
-            self.code.config(foreground='gray')
-            self.code.insert(0, 'Password')
-
-    # cuando enfoco al entry, desaparece el "Confirm Password" en gris, escribo en negro 
-    # tambien se encarga de eliminar espacios en blanco para eliminar sensibilidad        
-    def confirm_on_enter(self, e):
-        name = self.confirm_code.get()
-        self.confirm_code.delete(0, 'end')
-        if name == 'Confirm Password':
-            self.confirm_code.config(foreground='black')
-        else: self.confirm_code.insert(0,name.strip())
-    
-    # cuando desenfoco el entry, aparece el "Confirm Password" en gris (si no hay nada escrito)
-    def confirm_on_leave(self, e):
-        name = self.confirm_code.get()
-        if name == '':
-            self.confirm_code.config(foreground='gray')
-            self.confirm_code.insert(0, 'Confirm Password')
-
     # conecto mediante el metodo bind() las funciones que cree con los eventos FocusIn and Out
     def connect_focus_events(self):
-        self.user.bind('<FocusIn>', self.user_on_enter)
-        self.user.bind('<FocusOut>', self.user_on_leave)
-        self.code.bind('<FocusIn>', self.code_on_enter)
-        self.code.bind('<FocusOut>', self.code_on_leave)
-        self.confirm_code.bind('<FocusIn>', self.confirm_on_enter)
-        self.confirm_code.bind('<FocusOut>', self.confirm_on_leave)
+        self.user.bind('<FocusIn>', lambda event: focuses.user_on_enter(self.user))
+        self.user.bind('<FocusOut>', lambda event: focuses.user_on_leave(self.user))
+        self.code.bind('<FocusIn>', lambda event: focuses.code_on_enter(self.code))
+        self.code.bind('<FocusOut>', lambda event: focuses.code_on_leave(self.code))
+        self.confirm_code.bind('<FocusIn>', lambda event: focuses.confirm_on_enter(self.confirm_code))
+        self.confirm_code.bind('<FocusOut>', lambda event: focuses.confirm_on_leave(self.confirm_code))
+    
 
     # Funcion para el boton de Create Account, 
     def signup(self):
@@ -140,19 +83,25 @@ class RegisterFrame(tk.Frame):
             messagebox.showerror('Error', 'Username already in use')
             return
         
-        # Verificar el patrón de la contraseña usando una expresión regular
-        if not re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$", password):
+        # Verificar el patrón del Usuario y contraseña usando una expresión regular
+        username_req = re.match(r"^\S+$", username)
+        password_req = re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\w\d!@#$%^&*()-_+=]{8,}$", password)
+
+        if not (username_req and password_req):
             messagebox.showerror('Error',
-                                 'Password must be at least 8 characters long and contain'
-                                 'at least one lowercase letter, one uppercase letter, and one digit')
+                                 '- Username must contain no whitespaces\n'
+                                 '- Password must be at least 8 characters longand contain at\n'
+                                 '  Least 1 digit, 1 uppercase letter and 1 lowercase letter.\n'
+                                 '  No whitespaces allowed')
             return
         
         # Si el registro cumplio con todo, guarda al usuario y contraseña
-        with open('users.txt', 'a') as file:
-            file.write(f"{username},{password}\n")
 
         # Actualiza la lista de usuarios existentes
-        self.existing_users.append(username)
+        self.existing_users[username] = password
+
+        with open('users.txt', 'a') as file:
+            file.write(f"{username},{password}\n")
 
         # Mostra el mensaje de exito
         messagebox.showinfo('Success', 'Account created succesfully')
