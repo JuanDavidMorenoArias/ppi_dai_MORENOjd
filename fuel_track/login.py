@@ -50,8 +50,7 @@ class LogInFrame(tk.Frame):
         self.user.bind('<FocusOut>', lambda event: focuses.user_on_leave(self.user))
         self.code.bind('<FocusIn>', lambda event: focuses.code_on_enter(self.code))
         self.code.bind('<FocusOut>', lambda event: focuses.code_on_leave(self.code))
-    
-    
+       
     # El metodo que va ligado al Boton de sign in, que abrira todo lo demas si se inicia sesion :)
     def sign_in(self):
         username = self.user.get().strip()

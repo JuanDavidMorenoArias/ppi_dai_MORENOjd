@@ -1,20 +1,15 @@
 #Librerias para creacion de la app
 import tkinter as tk
 from tkinter import ttk, messagebox
-
 # Importa desde la librería Pillow para trabajar con imágenes
 from PIL import Image, ImageTk  
-
 # Importo la clase de inicio de sesion
 from login import LogInFrame
 from register import RegisterFrame
-
 # Ctypes para que al ejecutar aparezca mi icono en la TaskBar
 import ctypes
 myappid = 'mycompany.myproduct.subproduct.version'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-
-
 
 class App():
     # Init va a correr cada que llamemos la clase como en la linea App()

@@ -2,7 +2,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import re
-
 import focuses
 
 class RegisterFrame(tk.Frame):
@@ -52,6 +51,7 @@ class RegisterFrame(tk.Frame):
     
     # conecto mediante el metodo bind() las funciones que cree con los eventos FocusIn and Out
     def connect_focus_events(self):
+
         self.user.bind('<FocusIn>', lambda event: focuses.user_on_enter(self.user))
         self.user.bind('<FocusOut>', lambda event: focuses.user_on_leave(self.user))
         self.code.bind('<FocusIn>', lambda event: focuses.code_on_enter(self.code))
@@ -59,7 +59,6 @@ class RegisterFrame(tk.Frame):
         self.confirm_code.bind('<FocusIn>', lambda event: focuses.confirm_on_enter(self.confirm_code))
         self.confirm_code.bind('<FocusOut>', lambda event: focuses.confirm_on_leave(self.confirm_code))
     
-
     # Funcion para el boton de Create Account, 
     def signup(self):
         
@@ -96,7 +95,6 @@ class RegisterFrame(tk.Frame):
             return
         
         # Si el registro cumplio con todo, guarda al usuario y contraseña
-
         # Actualiza la lista de usuarios existentes
         self.existing_users[username] = password
 
@@ -105,7 +103,3 @@ class RegisterFrame(tk.Frame):
 
         # Mostra el mensaje de exito
         messagebox.showinfo('Success', 'Account created succesfully')
-
-
-
-    
