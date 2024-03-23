@@ -2,18 +2,17 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import re
-import focuses
+import utils
+import login
 
 class RegisterFrame(tk.Frame):
     # En esta clase
-    def __init__(self,parent,switch_to_login,existing_users):
+    def __init__(self,parent):
         super().__init__(parent, width=350, height=450, background='white')
         # Parent: la ventana padre
         self.parent = parent
-        #switch es el metodo para ir al inicio de sesion
-        self.switch_to_login = switch_to_login
         # almacena los usuarios
-        self.existing_users = existing_users
+        self.existing_users = utils.load_existing_users()
         # activa la creacion de widgets
         self.create_widgets()
               
@@ -49,15 +48,24 @@ class RegisterFrame(tk.Frame):
         self.sign_in_button.place(relx=0.59, rely=0.91)
         self.sign_in_button.config(command=self.switch_to_login)
     
+    def switch_to_login(self): # El boton de sign in me mande al inicio de sesion
+
+        # Destruir la ventana de registro
+        self.destroy()
+        # Crear y mostrar la ventana de inicio de sesión
+        self.login_frame = login.LogInFrame(self.parent)
+        self.login_frame.place(relx=0.75, rely=0.5, anchor='center')
+        self.login_frame.connect_focus_events()
+
     # conecto mediante el metodo bind() las funciones que cree con los eventos FocusIn and Out
     def connect_focus_events(self):
 
-        self.user.bind('<FocusIn>', lambda event: focuses.user_on_enter(self.user))
-        self.user.bind('<FocusOut>', lambda event: focuses.user_on_leave(self.user))
-        self.code.bind('<FocusIn>', lambda event: focuses.code_on_enter(self.code))
-        self.code.bind('<FocusOut>', lambda event: focuses.code_on_leave(self.code))
-        self.confirm_code.bind('<FocusIn>', lambda event: focuses.confirm_on_enter(self.confirm_code))
-        self.confirm_code.bind('<FocusOut>', lambda event: focuses.confirm_on_leave(self.confirm_code))
+        self.user.bind('<FocusIn>', lambda event: utils.user_on_enter(self.user))
+        self.user.bind('<FocusOut>', lambda event: utils.user_on_leave(self.user))
+        self.code.bind('<FocusIn>', lambda event: utils.code_on_enter(self.code))
+        self.code.bind('<FocusOut>', lambda event: utils.code_on_leave(self.code))
+        self.confirm_code.bind('<FocusIn>', lambda event: utils.confirm_on_enter(self.confirm_code))
+        self.confirm_code.bind('<FocusOut>', lambda event: utils.confirm_on_leave(self.confirm_code))
     
     # Funcion para el boton de Create Account, 
     def signup(self):
@@ -103,3 +111,4 @@ class RegisterFrame(tk.Frame):
 
         # Mostra el mensaje de exito
         messagebox.showinfo('Success', 'Account created succesfully')
+        self.switch_to_login()

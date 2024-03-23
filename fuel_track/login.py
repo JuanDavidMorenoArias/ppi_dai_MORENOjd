@@ -2,21 +2,24 @@
 # Importo librerias
 import tkinter as tk
 from tkinter import ttk, messagebox
+import utils
+import register
 
-import focuses
 
 class LogInFrame(tk.Frame):
     # En esta clase 
-    def __init__(self,parent,switch_to_register, existing_users):
+    def __init__(self,parent, login_callback):
         super().__init__(parent, width=350, height=350, background='white')
         # parent: la ventana padre 
         self.parent = parent
-        # switch es el metodo para ir al registro
-        self.switch_to_register = switch_to_register
         # almacena los usuarios
-        self.existing_users = existing_users
+        self.existing_users = utils.load_existing_users()
+        # Switche de inicio de sesion
+        self.login_callback = login_callback
         # activa la creacion de widgets
         self.create_widgets()
+        self.place(relx=0.75,rely=0.5, anchor='center')
+        self.connect_focus_events()
     
     # Creacion de los widgets como botones, entries y textos para la interfaz de inicio de sesion.
     def create_widgets(self): 
@@ -46,15 +49,26 @@ class LogInFrame(tk.Frame):
         self.sign_up_button.config(command=self.switch_to_register)
 
     def connect_focus_events(self):
-        self.user.bind('<FocusIn>', lambda event: focuses.user_on_enter(self.user))
-        self.user.bind('<FocusOut>', lambda event: focuses.user_on_leave(self.user))
-        self.code.bind('<FocusIn>', lambda event: focuses.code_on_enter(self.code))
-        self.code.bind('<FocusOut>', lambda event: focuses.code_on_leave(self.code))
-       
+        self.user.bind('<FocusIn>', lambda event: utils.user_on_enter(self.user))
+        self.user.bind('<FocusOut>', lambda event: utils.user_on_leave(self.user))
+        self.code.bind('<FocusIn>', lambda event: utils.code_on_enter(self.code))
+        self.code.bind('<FocusOut>', lambda event: utils.code_on_leave(self.code))
+
+    def switch_to_register(self): # El boton de sign up me mande al registro 
+
+        # Destruir la ventana de inicio de sesión
+        self.destroy()
+        # Crear y mostrar la ventana de registro
+        self.register_frame = register.RegisterFrame(self.parent)
+        self.register_frame.place(relx=0.75,rely=0.5, anchor='center')
+        self.register_frame.connect_focus_events()
+    
+
     # El metodo que va ligado al Boton de sign in, que abrira todo lo demas si se inicia sesion :)
     def sign_in(self):
         username = self.user.get().strip()
         password = self.code.get().strip()
+        self.login_callback(False)
 
         if username not in self.existing_users:
             messagebox.showerror('Error','User not found!')
@@ -62,5 +76,7 @@ class LogInFrame(tk.Frame):
             if self.existing_users[username] != password:
                 messagebox.showerror('Error', 'Incorrect password!')
             else:
+                self.user.delete(0, 'end')
+                self.code.delete(0, 'end')
                 messagebox.showinfo('Welcome back','Logged in successfully!')
-            
+                self.login_callback(True)
