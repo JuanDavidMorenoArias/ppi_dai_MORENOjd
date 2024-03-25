@@ -9,7 +9,6 @@ class IntroFrame(tk.Frame):
         super().__init__(parent, width=500, height=600, background='white')
         # activa la creacion de widgets
         self.create_widgets()
-        self.place(relx=0.27,rely=0.5,anchor='center')
 
     def create_widgets(self):
 

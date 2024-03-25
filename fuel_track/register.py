@@ -3,16 +3,17 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import re
 import utils
-import login
 
 class RegisterFrame(tk.Frame):
     # En esta clase
-    def __init__(self,parent):
+    def __init__(self,parent, login_frame):
         super().__init__(parent, width=350, height=450, background='white')
+        # Yo el propio frame
+        self.me = self
         # Parent: la ventana padre
         self.parent = parent
-        # almacena los usuarios
-        self.existing_users = utils.load_existing_users()
+        # el frame login
+        self.login_frame = login_frame
         # activa la creacion de widgets
         self.create_widgets()
               
@@ -53,9 +54,7 @@ class RegisterFrame(tk.Frame):
         # Destruir la ventana de registro
         self.destroy()
         # Crear y mostrar la ventana de inicio de sesión
-        self.login_frame = login.LogInFrame(self.parent)
-        self.login_frame.place(relx=0.75, rely=0.5, anchor='center')
-        self.login_frame.connect_focus_events()
+        self.login_frame.reshow()
 
     # conecto mediante el metodo bind() las funciones que cree con los eventos FocusIn and Out
     def connect_focus_events(self):
@@ -69,6 +68,7 @@ class RegisterFrame(tk.Frame):
     
     # Funcion para el boton de Create Account, 
     def signup(self):
+        existing_users = utils.load_existing_users()
         
         # Recolecta los datos para comparar
         username = self.user.get().strip()
@@ -86,7 +86,7 @@ class RegisterFrame(tk.Frame):
             return
         
         #Verificar que el nombre de usuario no este ya en uso
-        if username in self.existing_users:
+        if username in existing_users:
             messagebox.showerror('Error', 'Username already in use')
             return
         
@@ -104,7 +104,7 @@ class RegisterFrame(tk.Frame):
         
         # Si el registro cumplio con todo, guarda al usuario y contraseña
         # Actualiza la lista de usuarios existentes
-        self.existing_users[username] = password
+        existing_users[username] = password
 
         with open('users.txt', 'a') as file:
             file.write(f"{username},{password}\n")
@@ -112,3 +112,5 @@ class RegisterFrame(tk.Frame):
         # Mostra el mensaje de exito
         messagebox.showinfo('Success', 'Account created succesfully')
         self.switch_to_login()
+
+

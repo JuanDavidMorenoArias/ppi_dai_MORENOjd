@@ -4,22 +4,22 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import utils
 import register
-
+import events
 
 class LogInFrame(tk.Frame):
     # En esta clase 
     def __init__(self,parent, login_callback):
         super().__init__(parent, width=350, height=350, background='white')
+        # Yo: el mismo frame
+        self.me = self
+        # para cerrar
+        self.login_callback = login_callback
         # parent: la ventana padre 
         self.parent = parent
-        # almacena los usuarios
-        self.existing_users = utils.load_existing_users()
-        # Switche de inicio de sesion
-        self.login_callback = login_callback
         # activa la creacion de widgets
         self.create_widgets()
-        self.place(relx=0.75,rely=0.5, anchor='center')
-        self.connect_focus_events()
+
+        
     
     # Creacion de los widgets como botones, entries y textos para la interfaz de inicio de sesion.
     def create_widgets(self): 
@@ -57,26 +57,33 @@ class LogInFrame(tk.Frame):
     def switch_to_register(self): # El boton de sign up me mande al registro 
 
         # Destruir la ventana de inicio de sesión
-        self.destroy()
+        self.place_forget()
         # Crear y mostrar la ventana de registro
-        self.register_frame = register.RegisterFrame(self.parent)
+        self.register_frame = register.RegisterFrame(self.parent, self.me)
         self.register_frame.place(relx=0.75,rely=0.5, anchor='center')
         self.register_frame.connect_focus_events()
     
 
     # El metodo que va ligado al Boton de sign in, que abrira todo lo demas si se inicia sesion :)
     def sign_in(self):
+        existing_users = utils.load_existing_users()
         username = self.user.get().strip()
         password = self.code.get().strip()
-        self.login_callback(False)
+        
 
-        if username not in self.existing_users:
+        if username not in existing_users:
             messagebox.showerror('Error','User not found!')
         else:
-            if self.existing_users[username] != password:
+            if existing_users[username] != password:
                 messagebox.showerror('Error', 'Incorrect password!')
             else:
                 self.user.delete(0, 'end')
                 self.code.delete(0, 'end')
                 messagebox.showinfo('Welcome back','Logged in successfully!')
                 self.login_callback(True)
+
+
+    def reshow(self):
+        self.place(relx=0.75,rely=0.5, anchor='center')
+
+    
