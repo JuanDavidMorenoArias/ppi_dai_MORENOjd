@@ -1,11 +1,12 @@
 #Librerias para creacion de la app
 import tkinter as tk
 # Importo la clase de inicio de sesion, registro y funciones
-from login import LogInFrame
-from intro import IntroFrame
+from Frames.login import LogInFrame
+from Frames.intro import IntroFrame
+from Frames.toggle_menu import ToggleMenuFrame
 
 import utils
-import events
+
 # Ctypes para que al ejecutar aparezca mi icono en la TaskBar
 import ctypes
 myappid = 'mycompany.myproduct.subproduct.version'
@@ -36,4 +37,15 @@ class App():
         if login_successful:
             self.intro_frame.destroy()
             self.login_frame.destroy()
+            self.main_show()
 
+            pass # aqui ira supongo la llamada del after login
+    
+    def main_show(self):
+        toggle_menu = ToggleMenuFrame(self.root,self.entry_show)
+        toggle_menu.pack(side=tk.TOP,fill=tk.X)
+        toggle_menu.pack_propagate(False)
+        toggle_menu.configure(height=70)
+
+        
+                    

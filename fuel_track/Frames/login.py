@@ -3,8 +3,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import utils
-import register
-import events
+import Frames.register as register
 
 class LogInFrame(tk.Frame):
     # En esta clase 

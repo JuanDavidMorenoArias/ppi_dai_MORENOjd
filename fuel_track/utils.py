@@ -2,7 +2,7 @@
 # El estilo de la ventana
 def fueltrack_window_style(window):
     window.geometry('1000x600') # tamaño de ventana
-    window.resizable(False, False) # no se le podra cambiar el tamaño
+    window.resizable(0,0) # no se le podra cambiar el tamaño
     window.title('Fueltrack') # titulo de la ventana
     window.config(background='white') 
     window.iconbitmap("Images/FueltrackIcon.ico") # Imagen en la barra de titulo  
