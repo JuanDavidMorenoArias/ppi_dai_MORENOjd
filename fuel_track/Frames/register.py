@@ -58,11 +58,13 @@ class RegisterFrame(tk.Frame):
 
     # conecto mediante el metodo bind() las funciones que cree con los eventos FocusIn and Out
     def connect_focus_events(self):
-
+        # Username
         self.user.bind('<FocusIn>', lambda event: utils.user_on_enter(self.user))
         self.user.bind('<FocusOut>', lambda event: utils.user_on_leave(self.user))
+        # Password
         self.code.bind('<FocusIn>', lambda event: utils.code_on_enter(self.code))
         self.code.bind('<FocusOut>', lambda event: utils.code_on_leave(self.code))
+        # Confirm Password
         self.confirm_code.bind('<FocusIn>', lambda event: utils.confirm_on_enter(self.confirm_code))
         self.confirm_code.bind('<FocusOut>', lambda event: utils.confirm_on_leave(self.confirm_code))
     
@@ -91,10 +93,10 @@ class RegisterFrame(tk.Frame):
             return
         
         # Verificar el patrón del Usuario y contraseña usando una expresión regular
-        username_req = re.match(r"^\S+$", username)
-        password_req = re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\w\d!@#$%^&*()-_+=]{8,}$", password)
+        username_requirement = re.match(r"^\S+$", username)
+        password_requirement = re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\w\d!@#$%^&*()-_+=]{8,}$", password)
 
-        if not (username_req and password_req):
+        if not (username_requirement and password_requirement):
             messagebox.showerror('Error',
                                  '- Username must contain no whitespaces\n'
                                  '- Password must be at least 8 characters longand contain at\n'

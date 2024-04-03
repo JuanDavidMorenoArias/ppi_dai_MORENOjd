@@ -48,8 +48,10 @@ class LogInFrame(tk.Frame):
         self.sign_up_button.config(command=self.switch_to_register)
 
     def connect_focus_events(self):
+        # Username
         self.user.bind('<FocusIn>', lambda event: utils.user_on_enter(self.user))
         self.user.bind('<FocusOut>', lambda event: utils.user_on_leave(self.user))
+        # Password
         self.code.bind('<FocusIn>', lambda event: utils.code_on_enter(self.code))
         self.code.bind('<FocusOut>', lambda event: utils.code_on_leave(self.code))
 
@@ -65,16 +67,20 @@ class LogInFrame(tk.Frame):
 
     # El metodo que va ligado al Boton de sign in, que abrira todo lo demas si se inicia sesion :)
     def sign_in(self):
+        # lista de los usuarios creados hasta el momento
         existing_users = utils.load_existing_users()
         username = self.user.get().strip()
         password = self.code.get().strip()
         
-
-        if username not in existing_users:
+        # Pregunta si el usuario esta creado
+        if username not in existing_users: #si no esta creado envia error
             messagebox.showerror('Error','User not found!')
-        else:
+    
+        # ahora pregunta si la contraseña coincide con la creada por el usuario
+        else: # si no coincide envia error
             if existing_users[username] != password:
                 messagebox.showerror('Error', 'Incorrect password!')
+            
             else:
                 self.user.delete(0, 'end')
                 self.code.delete(0, 'end')
