@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from Frames.home_page import HomeFrame
 from Frames.mileage_page import MileageFrame
-from Frames.stations_page import StationsFrame
+from Frames.map_frame.stations_page import StationsFrame
 from Frames.vehicles_page import VehiclesFrame
 
 class ToggleMenuFrame(tk.Frame):
